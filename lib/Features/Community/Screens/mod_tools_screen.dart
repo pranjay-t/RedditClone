@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reddit_clone/Features/posts/Resposive/responsive.dart';
+import 'package:reddit_clone/Resposive/responsive.dart';
 import 'package:routemaster/routemaster.dart';
 
 class ModToolsScreen extends ConsumerWidget {

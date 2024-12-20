@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:reddit_clone/core/constants/failure.dart';
 import 'package:reddit_clone/core/constants/type_def.dart';
-import 'package:reddit_clone/secret.dart';
+import 'package:reddit_clone/cloudinary_storage.dart';
 
 final cloudinaryStorageProvider = Provider((ref) {
   return StorageRepository();

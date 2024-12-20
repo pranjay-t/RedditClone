@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/Features/Community/controller/community_controller.dart';
-import 'package:reddit_clone/commons/loader.dart';
+import 'package:reddit_clone/core/commons/loader.dart';
 import 'package:reddit_clone/core/constants/error_text.dart';
 import 'package:routemaster/routemaster.dart';
 

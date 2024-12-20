@@ -7,7 +7,7 @@ import 'package:reddit_clone/core/constants/type_def.dart';
 import 'package:reddit_clone/models/comment_model.dart';
 import 'package:reddit_clone/models/community_model.dart';
 import 'package:reddit_clone/models/post_model.dart';
-import 'package:reddit_clone/providers/auth_provider.dart';
+import 'package:reddit_clone/core/providers/auth_provider.dart';
 
 final postRepositoryProvider = Provider((ref) {
   return PostRespository(firestore: ref.watch(firestoreProvider));

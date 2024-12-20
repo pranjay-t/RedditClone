@@ -8,9 +8,9 @@ import 'package:reddit_clone/core/enums/enums.dart';
 import 'package:reddit_clone/models/comment_model.dart';
 import 'package:reddit_clone/models/community_model.dart';
 import 'package:reddit_clone/models/post_model.dart';
-import 'package:reddit_clone/providers/storage_repository_provider.dart';
-import 'package:reddit_clone/user_profile/controller/user_profile_controller.dart';
-import 'package:reddit_clone/utils.dart';
+import 'package:reddit_clone/core/providers/storage_repository_provider.dart';
+import 'package:reddit_clone/Features/user_profile/controller/user_profile_controller.dart';
+import 'package:reddit_clone/core/constants/utils.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:uuid/uuid.dart';
 

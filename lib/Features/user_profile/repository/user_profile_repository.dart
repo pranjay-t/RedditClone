@@ -6,7 +6,7 @@ import 'package:reddit_clone/core/constants/firebase_constants.dart';
 import 'package:reddit_clone/core/constants/type_def.dart';
 import 'package:reddit_clone/models/post_model.dart';
 import 'package:reddit_clone/models/user_models.dart';
-import 'package:reddit_clone/providers/auth_provider.dart';
+import 'package:reddit_clone/core/providers/auth_provider.dart';
 
 final userProfileRepositoryProvider = Provider((ref) {
   return UserProfileRepository(firestore: ref.watch(firestoreProvider));

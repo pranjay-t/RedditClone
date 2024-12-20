@@ -5,13 +5,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/Features/Community/controller/community_controller.dart';
-import 'package:reddit_clone/Features/posts/Resposive/responsive.dart';
+import 'package:reddit_clone/Resposive/responsive.dart';
 import 'package:reddit_clone/Theme/pallete.dart';
-import 'package:reddit_clone/commons/loader.dart';
+import 'package:reddit_clone/core/commons/loader.dart';
 import 'package:reddit_clone/core/constants/constants.dart';
 import 'package:reddit_clone/core/constants/error_text.dart';
 import 'package:reddit_clone/models/community_model.dart';
-import 'package:reddit_clone/utils.dart';
+import 'package:reddit_clone/core/constants/utils.dart';
 
 class EditCommunityScreen extends ConsumerStatefulWidget {
   final String name;

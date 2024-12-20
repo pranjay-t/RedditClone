@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/Features/auths/controller/auth_controller.dart';
-import 'package:reddit_clone/Features/posts/Resposive/responsive.dart';
+import 'package:reddit_clone/Resposive/responsive.dart';
 import 'package:reddit_clone/Features/posts/controller/post_controller.dart';
 import 'package:reddit_clone/Features/posts/widgets/comment_card.dart';
-import 'package:reddit_clone/commons/loader.dart';
-import 'package:reddit_clone/commons/post_card.dart';
+import 'package:reddit_clone/core/commons/loader.dart';
+import 'package:reddit_clone/core/commons/post_card.dart';
 import 'package:reddit_clone/core/constants/error_text.dart';
 
 class CommentsScreen extends ConsumerStatefulWidget {

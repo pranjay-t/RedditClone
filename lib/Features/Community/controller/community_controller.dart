@@ -9,8 +9,8 @@ import 'package:reddit_clone/core/constants/constants.dart';
 import 'package:reddit_clone/core/constants/failure.dart';
 import 'package:reddit_clone/models/community_model.dart';
 import 'package:reddit_clone/models/post_model.dart';
-import 'package:reddit_clone/providers/storage_repository_provider.dart';
-import 'package:reddit_clone/utils.dart';
+import 'package:reddit_clone/core/providers/storage_repository_provider.dart';
+import 'package:reddit_clone/core/constants/utils.dart';
 import 'package:routemaster/routemaster.dart';
 
 final userCommunityProvider = StreamProvider.family((ref,String uid) {
