@@ -17,6 +17,7 @@ class AddPostScreen extends ConsumerWidget {
     double cardSize = kIsWeb ? 360 : 120;
     double iconSize = kIsWeb ? 90 : 50;
     return Scaffold(
+     
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,

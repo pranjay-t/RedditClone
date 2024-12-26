@@ -25,15 +25,21 @@ class CommunityListDrawer extends ConsumerWidget {
     final user = ref.watch(userProvider)!;
     final isGuest = !user.isAuthenticated;
     return Drawer(
+      
       child: SafeArea(
           child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: Text('Your Communities',style: TextStyle(fontFamily: 'carter'),),
+          ),
           isGuest
               ? const SignInButtons()
               : ListTile(
                   onTap: () => navigateToCreateCommunity(context),
-                  leading: const Icon(Icons.add),
-                  title: const Text('Create a community'),
+                  leading: const Icon(Icons.add,size: 30,),
+                  title: const Text('Create a community',style: TextStyle(fontFamily: 'carter'),),
                 ),
           if (!isGuest)
             ref.watch(userCommunityProvider(user.uid)).when(
@@ -46,7 +52,7 @@ class CommunityListDrawer extends ConsumerWidget {
                           return ListTile(
                             onTap: () =>
                                 navigateToCommunityScreen(context, community),
-                            title: Text('r/${community.name}'),
+                            title: Text('r/${community.name}',style:const TextStyle(fontFamily: 'carter'),),
                             leading: CircleAvatar(
                               backgroundImage: NetworkImage(community.avatar),
                             ),

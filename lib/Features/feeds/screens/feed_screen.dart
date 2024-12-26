@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/Features/Community/controller/community_controller.dart';
 import 'package:reddit_clone/Features/auths/controller/auth_controller.dart';
 import 'package:reddit_clone/Features/posts/controller/post_controller.dart';
+import 'package:reddit_clone/Theme/pallete.dart';
 import 'package:reddit_clone/core/commons/loader.dart';
 import 'package:reddit_clone/core/commons/post_card.dart';
 import 'package:reddit_clone/core/constants/error_text.dart';
@@ -14,11 +15,13 @@ class FeedScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider)!;
     final isGuest = !user.isAuthenticated;
+    final theme = ref.watch(themeNotifierProvider.notifier).mode;
+
     if (!isGuest) {
       return ref.watch(userCommunityProvider(user.uid)).when(
           data: (communities) {
             if (communities.isEmpty) {
-              return const Center(child: Text('No communities joined.'));
+              return  Center(child: Text('No communities joined.',style: TextStyle(color: theme == ThemeMode.dark ? Pallete.appColorDark:Pallete.appColorLight,fontFamily: 'carter'),));
             }
             return ref.watch(userPostsProvider(communities)).when(
                 data: (posts) {

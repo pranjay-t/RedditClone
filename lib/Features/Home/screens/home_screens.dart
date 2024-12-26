@@ -1,4 +1,6 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: deprecated_member_use
+
+import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +9,6 @@ import 'package:reddit_clone/Features/Home/drawers/community_list_drawer.dart';
 import 'package:reddit_clone/Features/Home/drawers/profile_drawer.dart';
 import 'package:reddit_clone/Theme/pallete.dart';
 import 'package:reddit_clone/core/constants/constants.dart';
-import 'package:reddit_clone/delegates/search_community_delegate.dart';
 import 'package:routemaster/routemaster.dart';
 
 class HomeScreens extends ConsumerStatefulWidget {
@@ -15,10 +16,9 @@ class HomeScreens extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _HomeScreensState();
-  }
+}
 
-  class _HomeScreensState extends ConsumerState<HomeScreens>{
-  
+class _HomeScreensState extends ConsumerState<HomeScreens> {
   void displayMenuDrawer(BuildContext context) {
     Scaffold.of(context).openDrawer();
   }
@@ -27,72 +27,106 @@ class HomeScreens extends ConsumerStatefulWidget {
     Scaffold.of(context).openEndDrawer();
   }
 
-  void navigateToAddPost(BuildContext context){
+  void navigateToAddPost(BuildContext context) {
     Routemaster.of(context).push('/add-posts');
   }
-  int _page = 0;
 
-  void pageChange(int page){
+  final _pageController = NotchBottomBarController();
+
+  void pageChange(int page) {
     setState(() {
-      _page = page;
+      _pageController.index = page;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider)!;
     final isGuest = !user.isAuthenticated;
-    final currentTheme = ref.watch(themeNotifierProvider);
+    final theme = ref.watch(themeNotifierProvider.notifier).mode;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-        centerTitle: false,
-        leading: Builder(builder: (context) {
-          return IconButton(
-            onPressed: () => displayMenuDrawer(context),
-            icon: const Icon(Icons.menu),
-          );
-        }),
-        actions: [
-          IconButton(
-            onPressed: () => showSearch(
-                context: context, delegate: SearchCommunityDelegate(ref: ref)),
-            icon: const Icon(Icons.search),
-          ),
-          IconButton(
-            onPressed: () => navigateToAddPost(context),
-            icon:const Icon(Icons.add),
-          ),
-          Builder(builder: (context) {
-            return IconButton(
-                onPressed: () => displayProfileDrawer(context),
-                icon: CircleAvatar(
-                  radius: 17,
-                  backgroundImage: NetworkImage(user.profilePic),
-                ));
-          }),
-        ],
-      ),
+      appBar: Constants.appBarWidget[_pageController.index],
       drawer: const CommunityListDrawer(),
-      endDrawer:isGuest ? null : const ProfileDrawer(),
-      body: Constants.tabWidgets[_page],
-      bottomNavigationBar: isGuest || kIsWeb ? null : CupertinoTabBar(
-        backgroundColor:currentTheme.dialogBackgroundColor, 
-        activeColor: currentTheme.iconTheme.color,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: ''
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            label: ''
-          ),
-          
-        ],
-        onTap: pageChange,
-        currentIndex: _page,
-      ),
+      endDrawer: isGuest ? null : const ProfileDrawer(),
+      body: Constants.tabWidgets[_pageController.index],
+      bottomNavigationBar: isGuest || kIsWeb
+          ? null
+          : AnimatedNotchBottomBar(
+              notchBottomBarController: _pageController,
+              notchColor: theme == ThemeMode.dark
+                  ? Pallete.appColorDark
+                  : Pallete.appColorLight,
+              color: theme == ThemeMode.dark
+                  ? const Color.fromARGB(255, 47, 47, 47)
+                  :const Color(0XFFe5e5e5),
+              showShadow: false,
+              bottomBarHeight: 10,
+              durationInMilliSeconds: 1,
+              itemLabelStyle: TextStyle(
+                color: theme == ThemeMode.dark
+                    ? Colors.white
+                    : const Color.fromARGB(255, 83, 81, 81),
+                fontFamily: 'carter',
+                fontSize: 12,
+              ),
+              onTap: pageChange,
+              bottomBarItems: [
+                BottomBarItem(
+                  inActiveItem: Icon(
+                    Icons.home_outlined,
+                    color: theme == ThemeMode.dark
+                        ? Colors.white
+                        : const Color.fromARGB(255, 83, 81, 81),
+                  ),
+                  activeItem: Icon(
+                    Icons.home_filled,
+                    color: theme == ThemeMode.dark ? Colors.black : Colors.white,
+                  ),
+                  itemLabel: 'Home',
+                ),
+                BottomBarItem(
+                  inActiveItem: Icon(
+                    Icons.add,
+                    color: theme == ThemeMode.dark
+                        ? Colors.white
+                        : const Color.fromARGB(255, 83, 81, 81),
+                  ),
+                  activeItem: Icon(
+                    Icons.add,
+                    color: theme == ThemeMode.dark ? Colors.black : Colors.white,
+                  ),
+                  itemLabel: 'Create',
+                ),
+                BottomBarItem(
+                  inActiveItem: Icon(
+                    Icons.chat_bubble_outline,
+                    color: theme == ThemeMode.dark
+                        ? Colors.white
+                        : const Color.fromARGB(255, 83, 81, 81),
+                  ),
+                  activeItem: Icon(
+                    Icons.chat_bubble,
+                    color: theme == ThemeMode.dark ? Colors.black : Colors.white,
+                  ),
+                  itemLabel: 'Chat',
+                ),
+                BottomBarItem(
+                  inActiveItem: Icon(
+                    Icons.notifications_outlined,
+                    color: theme == ThemeMode.dark
+                        ? Colors.white
+                        : const Color.fromARGB(255, 83, 81, 81),
+                  ),
+                  activeItem: Icon(
+                    Icons.notifications,
+                    color: theme == ThemeMode.dark ? Colors.black : Colors.white,
+                  ),
+                  itemLabel: 'Notification',
+                ),
+              ],
+              kIconSize: 20,
+              kBottomRadius: 20,
+            ),
     );
   }
-  
-  }
+}

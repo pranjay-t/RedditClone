@@ -24,6 +24,7 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final mainUser = ref.watch(userProvider)!.uid;
     return Scaffold(
       body: ref.watch(getUserDataProvider(widget.uid)).when(
             data: (user) {
@@ -42,6 +43,7 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                               fit: BoxFit.cover,
                             ),
                           ),
+                        if(user.uid == mainUser)
                           Align(
                             alignment: Alignment.bottomLeft,
                             child: Padding(
@@ -70,7 +72,7 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                             alignment: Alignment.bottomLeft,
                             child: Padding(
                               padding:
-                                  const EdgeInsets.only(bottom: 70, left: 30),
+                                   EdgeInsets.only(bottom: user.uid == mainUser ? 70 : 10, left: 30),
                               child: CircleAvatar(
                                 backgroundImage: NetworkImage(user.profilePic),
                                 radius: 40,

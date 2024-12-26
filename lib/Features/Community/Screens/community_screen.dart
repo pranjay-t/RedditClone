@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/Features/Community/controller/community_controller.dart';
 import 'package:reddit_clone/Features/auths/controller/auth_controller.dart';
+import 'package:reddit_clone/Theme/pallete.dart';
 import 'package:reddit_clone/core/commons/loader.dart';
 import 'package:reddit_clone/core/commons/post_card.dart';
 import 'package:reddit_clone/core/constants/error_text.dart';
@@ -24,10 +25,13 @@ class CommunityScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {    
+  Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider)!;
     final isGuest = !user.isAuthenticated;
+    final theme = ref.watch(themeNotifierProvider.notifier).mode;
+
     final uid = user.uid;
+    const desc = 'fhoshofwihf0wh0h0whf0h0wh0';
     return Scaffold(
       body: ref.watch(communityByNameProvider(name)).when(
             data: (community) {
@@ -36,6 +40,18 @@ class CommunityScreen extends ConsumerWidget {
                   headerSliverBuilder: (context, innerBoxIsScrolled) {
                     return [
                       SliverAppBar(
+                        leading: IconButton(
+                          icon: Icon(
+                            Icons.arrow_back_ios_new,
+                            size: 30,
+                            color: theme == ThemeMode.dark
+                                ? Pallete.appColorDark
+                                : Pallete.appColorLight,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
                         expandedHeight: 150,
                         floating: true,
                         snap: true,
@@ -55,66 +71,110 @@ class CommunityScreen extends ConsumerWidget {
                         sliver: SliverList(
                           delegate: SliverChildListDelegate(
                             [
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: CircleAvatar(
-                                  backgroundImage: NetworkImage(community.avatar),
-                                  radius: 40,
+                              FittedBox(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.topLeft,
+                                          child: Container(
+                                            width: 60,
+                                            height: 60,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: (theme == ThemeMode.dark
+                                                    ? Pallete.appColorDark
+                                                    : Pallete.appColorLight),
+                                                width: 3,
+                                              ),
+                                              image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image:NetworkImage(community.avatar),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 15,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'r/${community.name}',
+                                              style: const TextStyle(
+                                                fontSize: 19,
+                                                fontFamily: 'carter',
+                                              ),
+                                            ),
+                                            Text(
+                                                '${community.members.length} members',
+                                                style:const TextStyle(fontFamily: 'carter',fontSize: 13),
+                                                ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(width: 15,),
+                                    if (!isGuest)
+                                      community.mods.contains(uid)
+                                          ? OutlinedButton(
+                                              onPressed: () =>
+                                                  navigateToModTools(context),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:theme == ThemeMode.dark ? Pallete.appColorDark : Pallete.appColorLight,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  side: BorderSide.none,
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 14,
+                                                ),
+                                              ),
+                                              child:  Text(
+                                                'Mod Tools',
+                                                style: TextStyle(fontSize: 13,fontFamily: 'carter',color: theme == ThemeMode.dark ? Colors.black:Colors.white,),
+                                              ),
+                                            )
+                                          : OutlinedButton(
+                                              onPressed: () => joinCommunity(
+                                                  community, context, ref),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:theme == ThemeMode.dark ? Pallete.appColorDark : Pallete.appColorLight,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  side: BorderSide.none,
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 14),
+                                              ),
+                                              child: Text(
+                                                community.members.contains(uid)
+                                                    ? 'Joined'
+                                                    : 'Join',
+                                                style:
+                                                     TextStyle(fontSize: 13,fontFamily: 'carter',color: theme == ThemeMode.dark ? Colors.black:Colors.white,),
+                                              ),
+                                            )
+                                  ],
                                 ),
                               ),
                               const SizedBox(
-                                height: 5,
+                                height: 15,
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'r/${community.name}',
-                                    style: const TextStyle(
-                                      fontSize: 19,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                if(!isGuest)
-                                  community.mods.contains(uid)
-                                      ? OutlinedButton(
-                                          onPressed: () =>
-                                              navigateToModTools(context),
-                                          style: ElevatedButton.styleFrom(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              side: BorderSide.none,
-                                            ),
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 25),
-                                          ),
-                                          child: const Text('Mod Tools'),
-                                        )
-                                      : OutlinedButton(
-                                          onPressed: () => joinCommunity(
-                                              community, context, ref),
-                                          style: ElevatedButton.styleFrom(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              side: BorderSide.none,
-                                            ),
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 25),
-                                          ),
-                                          child: Text(
-                                              community.members.contains(uid)
-                                                  ? 'Joined'
-                                                  : 'Join'),
-                                        )
-                                ],
+                              const Text(
+                                desc,
+                                style: TextStyle(fontSize: 12,fontFamily: 'carter'),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10),
-                                child:
-                                    Text('${community.members.length} members'),
-                              )
                             ],
                           ),
                         ),
@@ -122,12 +182,13 @@ class CommunityScreen extends ConsumerWidget {
                     ];
                   },
                   body: Padding(
-                    padding:const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: ref
                         .watch(getUserCommunityPostProvider(community.name))
                         .when(
                           data: (posts) {
                             return ListView.builder(
+                              padding: const EdgeInsets.all(0),
                               itemCount: posts.length,
                               itemBuilder: (BuildContext context, int index) {
                                 final post = posts[index];
@@ -138,7 +199,7 @@ class CommunityScreen extends ConsumerWidget {
                             );
                           },
                           error: (error, stackTrace) {
-                            print(error);
+                            // print(error);
                             return ErrorText(
                               error: error.toString(),
                             );

@@ -8,12 +8,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 void logOut(WidgetRef ref) {
   ref.watch(authControllerProvider.notifier).logOut();
   clearLocalData();
-  
 }
 
 void clearLocalData() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.clear(); 
+  await prefs.clear();
 }
 
 void navigateToUserProfile(String uid, BuildContext context) {
@@ -23,13 +22,14 @@ void navigateToUserProfile(String uid, BuildContext context) {
 void toggleTheme(WidgetRef ref) {
   return ref.read(themeNotifierProvider.notifier).toggleTheme();
 }
+
 class ProfileDrawer extends ConsumerWidget {
   const ProfileDrawer({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider)!;
-    
+    final theme = ref.watch(themeNotifierProvider.notifier).mode;
     return Drawer(
       child: SafeArea(
           child: Column(
@@ -43,21 +43,29 @@ class ProfileDrawer extends ConsumerWidget {
           ),
           Text(
             'u/${user.name}',
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 16, fontFamily: 'carter'),
           ),
           const Divider(
             thickness: 0.7,
           ),
           ListTile(
-            title: const Text('My Profile'),
-            leading: const Icon(Icons.person),
+            title: const Text(
+              'My Profile',
+              style: TextStyle(fontSize: 16, fontFamily: 'carter'),
+            ),
+            leading:  Icon(
+              Icons.person,
+              color: theme == ThemeMode.dark
+            ? Pallete.appColorDark
+            : Pallete.appColorLight,
+            ),
             onTap: () => navigateToUserProfile(user.uid, context),
           ),
           ListTile(
-            title: const Text('Log Out'),
+            title: const Text(
+              'Log Out',
+              style: TextStyle(fontSize: 16, fontFamily: 'carter'),
+            ),
             leading: Icon(
               Icons.logout,
               color: Pallete.redColor,
@@ -66,10 +74,25 @@ class ProfileDrawer extends ConsumerWidget {
               logOut(ref);
             },
           ),
-          Switch.adaptive(
-            value: ref.watch(themeNotifierProvider.notifier).mode == ThemeMode.dark,
-            onChanged: (val) => toggleTheme(ref),
-          ),
+            const Divider(
+            thickness: 0.7,
+            ),
+            ListTile(
+            title:  Text(
+              theme !=
+                ThemeMode.dark ? 'Light Mode' : 'Dark Mode',
+              style:const TextStyle(fontSize: 16, fontFamily: 'carter'),
+            ),
+            trailing: Switch.adaptive(
+              value: theme ==
+                ThemeMode.dark,
+              onChanged: (val) => toggleTheme(ref),
+              activeTrackColor: Colors.white,
+              inactiveTrackColor: Colors.white,
+              activeColor: Colors.black,
+              inactiveThumbColor: Colors.blue,
+            ),
+            ),
         ],
       )),
     );

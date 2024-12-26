@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/Features/Community/controller/community_controller.dart';
 import 'package:reddit_clone/Features/auths/controller/auth_controller.dart';
 import 'package:reddit_clone/Resposive/responsive.dart';
+import 'package:reddit_clone/Theme/pallete.dart';
 import 'package:reddit_clone/core/commons/loader.dart';
+import 'package:reddit_clone/core/commons/profile_icon.dart';
 import 'package:reddit_clone/core/constants/error_text.dart';
 
 class AddModScreen extends ConsumerStatefulWidget {
@@ -17,34 +19,61 @@ class AddModScreen extends ConsumerStatefulWidget {
 class _AddModScreenState extends ConsumerState<AddModScreen> {
   Set<String> uids = {};
 
-  void addMod(String uid){
+  void addMod(String uid) {
     setState(() {
       uids.add(uid);
     });
   }
 
-  void removeMod(String uid){
+  void removeMod(String uid) {
     setState(() {
       uids.remove(uid);
     });
   }
 
-  void saveMods(String communityName,List<String>uids,BuildContext context,WidgetRef ref){
-    ref.watch(communityControllerProvider.notifier).addMods(communityName, uids, context);
+  void saveMods(String communityName, List<String> uids, BuildContext context,
+      WidgetRef ref) {
+    ref
+        .watch(communityControllerProvider.notifier)
+        .addMods(communityName, uids, context);
   }
-  
+
   int ctr = 0;
   @override
   Widget build(BuildContext context) {
+    final theme = ref.watch(themeNotifierProvider.notifier).mode;
+
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            size: 30,
+            color: theme == ThemeMode.dark
+                ? Pallete.appColorDark
+                : Pallete.appColorLight,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         actions: [
-          IconButton(onPressed: () => saveMods(widget.name,uids.toList(),context,ref), icon: const Icon(Icons.done)),
+          IconButton(
+              onPressed: () =>
+                  saveMods(widget.name, uids.toList(), context, ref),
+              icon: Icon(
+                weight: 10,
+                size: 28,
+                Icons.done,
+                color: theme == ThemeMode.dark
+                    ? Pallete.appColorDark
+                    : Pallete.appColorLight,
+              )),
         ],
       ),
       body: ref.watch(communityByNameProvider(widget.name)).when(
             data: (community) {
-              if(ctr == 0 ) {
+              if (ctr == 0) {
                 uids = community.mods.toSet();
               }
               ctr++;
@@ -57,16 +86,45 @@ class _AddModScreenState extends ConsumerState<AddModScreen> {
                       return ref.read(getUserDataProvider(member)).when(
                             data: (user) {
                               return CheckboxListTile(
+                                activeColor: theme == ThemeMode.dark
+                                    ? Pallete.appColorDark
+                                    : Pallete.appColorLight,
+                                checkColor: theme == ThemeMode.dark
+                                    ? Colors.black
+                                    : Colors.white,
                                 value: uids.contains(member),
                                 onChanged: (val) {
-                                  if(val!){
+                                  if (val!) {
                                     addMod(member);
-                                  }
-                                  else {
+                                  } else {
                                     removeMod(member);
                                   }
                                 },
-                                title: Text(user.name),
+                                title: Row(
+                                  children: [
+                                    const ProfileIcon(radius: 35),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'u/${user.name}',
+                                          style: const TextStyle(
+                                              fontFamily: 'carter'),
+                                        ),
+                                        Text(
+                                          '${user.karma} karma',
+                                          style: const TextStyle(
+                                              fontFamily: 'carter',
+                                              fontSize: 10),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               );
                             },
                             error: (error, stackTrace) =>

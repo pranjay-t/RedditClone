@@ -10,15 +10,23 @@ class Pallete {
   // Colors
   static const blackColor = Color.fromRGBO(1, 1, 1, 1); // primary color
   static const greyColor = Color.fromRGBO(26, 39, 45, 1); // secondary color
-  static const drawerColor = Color.fromRGBO(18, 18, 18, 1);
+  static const drawerColor = Color.fromRGBO(8, 8, 8, 1);
   static const whiteColor = Colors.white;
   static var redColor = Colors.red.shade500;
   static var blueColor = Colors.blue.shade300;
+  static var appColorDark = const Color.fromARGB(255,224,255,85);
+  // static var appColorLight = const Color(0xFF006D77);
+  static var appColorLight = const Color(0xFFe63946);
 
-  // Themes
+
+
+
+
+  
   static var darkModeAppTheme = ThemeData.dark().copyWith(
     scaffoldBackgroundColor: blackColor,
     cardColor: greyColor,
+    // textTheme: GoogleFonts.carterOneTextTheme(),
     appBarTheme: const AppBarTheme(
       backgroundColor: drawerColor,
       iconTheme: IconThemeData(
@@ -30,12 +38,14 @@ class Pallete {
     ),
     primaryColor: redColor,
     dialogBackgroundColor:
-        drawerColor, // will be used as alternative background color
+        drawerColor, 
   );
 
   static var lightModeAppTheme = ThemeData.light().copyWith(
     scaffoldBackgroundColor: whiteColor,
     cardColor: greyColor,
+    // textTheme: GoogleFonts.carterOneTextTheme(),
+
     appBarTheme: const AppBarTheme(
       backgroundColor: whiteColor,
       elevation: 0,
@@ -48,7 +58,7 @@ class Pallete {
     ),
     primaryColor: redColor,
     dialogBackgroundColor:
-        whiteColor, //backgroundColor tha yaha source code mein
+        whiteColor, 
   );
 }
 

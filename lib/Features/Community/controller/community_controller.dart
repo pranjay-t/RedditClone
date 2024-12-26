@@ -70,7 +70,7 @@ class CommunityController extends StateNotifier<bool> {
 
     state = false;
     res.fold(
-      (l) => showSnackBar(context, l.message),
+      (l) => showSnackBar(context, 'No NAME, no FAME! A name is the first step to Global Domination!'),
       (r) {
         showSnackBar(context, 'Community created sucessfully');
         Routemaster.of(context).pop();

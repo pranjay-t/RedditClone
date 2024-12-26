@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/Features/Community/controller/community_controller.dart';
+import 'package:reddit_clone/Theme/pallete.dart';
 import 'package:reddit_clone/core/commons/loader.dart';
+import 'package:reddit_clone/core/commons/profile_icon.dart';
 import 'package:reddit_clone/core/constants/error_text.dart';
 import 'package:routemaster/routemaster.dart';
 
@@ -11,18 +13,38 @@ class SearchCommunityDelegate extends SearchDelegate {
 
   @override
   List<Widget>? buildActions(BuildContext context) {
+    final theme = ref.watch(themeNotifierProvider.notifier).mode;
     return [
       IconButton(
-          onPressed: () {
-            query = '';
-          },
-          icon: const Icon(Icons.search)),
+        onPressed: () {
+          query = '';
+        },
+        icon:  Icon(
+          Icons.search,
+          size: 30,
+          color: theme == ThemeMode.dark
+            ? Pallete.appColorDark
+            : Pallete.appColorLight,
+        ),
+      ),
     ];
   }
 
   @override
   Widget? buildLeading(BuildContext context) {
-    return null;
+    final theme = ref.watch(themeNotifierProvider.notifier).mode;
+    return IconButton(
+      icon: Icon(
+        Icons.arrow_back_ios_new,
+        size: 30,
+        color: theme == ThemeMode.dark
+            ? Pallete.appColorDark
+            : Pallete.appColorLight,
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
   }
 
   @override
@@ -32,6 +54,8 @@ class SearchCommunityDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    final theme = ref.watch(themeNotifierProvider.notifier).mode;
+
     return ref.watch(searchCommunityProvider(query)).when(
           data: (communities) {
             return ListView.builder(
@@ -39,11 +63,43 @@ class SearchCommunityDelegate extends SearchDelegate {
               itemBuilder: (BuildContext context, int index) {
                 final community = communities[index];
                 return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(community.avatar),
+                  leading: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: (theme == ThemeMode.dark
+                            ? Pallete.appColorDark
+                            : Pallete.appColorLight),
+                        width: 2,
+                      ),
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(community.avatar),
+                      ),
+                    ),
                   ),
-                  title: Text('r/${community.name}'),
-                  onTap: () => navigateToCommunity(context,community.name),
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'r/${community.name}',
+                        style: const TextStyle(
+                          fontFamily: 'carter',
+                          fontSize: 16,
+                        ),
+                      ),
+                      Text(
+                        '${community.members.length} members',
+                        style: const TextStyle(
+                          fontFamily: 'carter',
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                  onTap: () => navigateToCommunity(context, community.name),
                 );
               },
             );
@@ -52,7 +108,8 @@ class SearchCommunityDelegate extends SearchDelegate {
           loading: () => const Loader(),
         );
   }
-  void navigateToCommunity(BuildContext context,String communityName){
+
+  void navigateToCommunity(BuildContext context, String communityName) {
     Routemaster.of(context).push('/r/$communityName');
   }
 }

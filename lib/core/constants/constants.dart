@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:reddit_clone/Features/Home/app_bar_widget.dart/home_app_bar.dart';
+import 'package:reddit_clone/Features/Home/app_bar_widget.dart/add_post_app_bar.dart';
+import 'package:reddit_clone/Features/Home/app_bar_widget.dart/chat_app_bar.dart';
+import 'package:reddit_clone/Features/Home/app_bar_widget.dart/notification_app_bar.dart';
+import 'package:reddit_clone/Features/chat/chat_screen.dart';
 import 'package:reddit_clone/Features/feeds/screens/feed_screen.dart';
+import 'package:reddit_clone/Features/notification/notification_screen.dart';
 import 'package:reddit_clone/Features/posts/screen/add_post_screen.dart';
 
 class Constants {
@@ -15,12 +21,25 @@ class Constants {
   static const tabWidgets = [
     FeedScreen(),
     AddPostScreen(),
+    ChatScreen(),
+    NotificationScreen(),
   ];
 
-  static const IconData up = IconData(0xe800, fontFamily: 'MyFlutterApp', fontPackage: null);
-  static const IconData down = IconData(0xe801, fontFamily: 'MyFlutterApp', fontPackage: null);
+  static final List<PreferredSizeWidget> appBarWidget = [
+    const HomeAppBar(),
+    const AddPostAppBar(),
+    const ChatAppBar(),
+    const NotificationAppBar(),
+  ];
+
 
   static const awardsPath = 'assets/images/awards';
+
+  // TextTheme textFont(BuildContext context){
+  //   return GoogleFonts.robotoTextTheme(
+  //         Theme.of(context).textTheme,
+  //       );
+  // }
 
   static const awards = {
     'awesomeAns': '${Constants.awardsPath}/awesomeanswer.png',
