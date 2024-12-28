@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reddit_clone/Features/auths/controller/auth_controller.dart';
 import 'package:reddit_clone/Theme/pallete.dart';
 import 'package:reddit_clone/core/commons/profile_icon.dart';
 import 'package:reddit_clone/delegates/search_community_delegate.dart';
@@ -21,7 +20,6 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userProvider)!;
     final theme = ref.watch(themeNotifierProvider.notifier).mode;
     return AppBar(
       title: Text(

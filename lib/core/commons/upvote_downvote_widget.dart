@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart';
 import 'package:reddit_clone/Features/auths/controller/auth_controller.dart';
 import 'package:reddit_clone/Features/posts/controller/post_controller.dart';
 import 'package:reddit_clone/Theme/pallete.dart';

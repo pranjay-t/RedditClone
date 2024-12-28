@@ -68,67 +68,69 @@ class PostCard extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                GestureDetector(
-                                    onTap: () => navigateToCommunity(context),
-                                    child: Container(
-                                      width: 54,
-                                      height: 54,
-                                      padding: const EdgeInsets.all(3),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(
-                                            color: theme == ThemeMode.dark
-                                                ? Pallete.appColorDark
-                                                : Pallete.appColorLight,
-                                            width: 3),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(9),
-                                        child: Image.network(
-                                          post.communityProfilePic,
-                                          width: 50,
-                                          height: 50,
-                                          fit: BoxFit.fill,
+                        FittedBox(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                      onTap: () => navigateToCommunity(context),
+                                      child: Container(
+                                        width: 54,
+                                        height: 54,
+                                        padding: const EdgeInsets.all(3),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(12),
+                                          border: Border.all(
+                                              color: theme == ThemeMode.dark
+                                                  ? Pallete.appColorDark
+                                                  : Pallete.appColorLight,
+                                              width: 3),
                                         ),
-                                      ),
-                                    ),),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () =>
-                                            navigateToCommunity(context),
-                                        child: Text(
-                                          'r/${post.communityName}',
-                                          style: const TextStyle(
-                                            fontSize: 17,
-                                            fontFamily: 'carter',
-                                            fontWeight: FontWeight.bold,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(9),
+                                          child: Image.network(
+                                            post.communityProfilePic,
+                                            width: 50,
+                                            height: 50,
+                                            fit: BoxFit.fill,
                                           ),
                                         ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () => navigateToUser(context),
-                                        child: Text(
-                                          'u/${post.username}',
-                                          style: const TextStyle(fontSize: 11,fontFamily: 'carter'),
+                                      ),),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () =>
+                                              navigateToCommunity(context),
+                                          child: Text(
+                                            'r/${post.communityName}',
+                                            style: const TextStyle(
+                                              fontSize: 17,
+                                              fontFamily: 'carter',
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                        GestureDetector(
+                                          onTap: () => navigateToUser(context),
+                                          child: Text(
+                                            'u/${post.username}',
+                                            style: const TextStyle(fontSize: 11,fontFamily: 'carter'),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            HomeShowModalDialog(post: post),
-                          ],
+                                ],
+                              ),
+                              HomeShowModalDialog(post: post),
+                            ],
+                          ),
                         ),
                         if (post.awards.isNotEmpty) ...[
                           const SizedBox(height: 5),
@@ -207,56 +209,58 @@ class PostCard extends ConsumerWidget {
                               ),
                             ),
                           ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            if (!kIsWeb)
-                              UpvoteDownvoteWidget(post: post),
-                            Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () => navigateToComments(context),
-                                  icon: Icon(
-                                    Icons.comment_outlined,
-                                    color: theme == ThemeMode.dark
-                                        ? Pallete.appColorDark
-                                        : Pallete.appColorLight,
+                        FittedBox(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              if (!kIsWeb)
+                                UpvoteDownvoteWidget(post: post),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () => navigateToComments(context),
+                                    icon: Icon(
+                                      Icons.comment_outlined,
+                                      color: theme == ThemeMode.dark
+                                          ? Pallete.appColorDark
+                                          : Pallete.appColorLight,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  '${post.commentCount == 0 ? 'Comment' : post.commentCount}',
-                                  style: const TextStyle(
-                                      fontSize: 17, fontFamily: 'carter'),
-                                ),
-                              ],
-                            ),
-                            ref
-                                .watch(
-                                    communityByNameProvider(post.communityName))
-                                .when(
-                                  data: (community) {
-                                    if (community.mods.contains(user.uid)) {
-                                      return IconButton(
-                                        onPressed: () {},
-                                        icon: Icon(
-                                          Icons.admin_panel_settings,
-                                          size: 28,
-                                          color: theme == ThemeMode.dark
-                                              ? Pallete.appColorDark
-                                              : Pallete.appColorLight,
-                                        ),
-                                      );
-                                    } else {
-                                      return const SizedBox();
-                                    }
-                                  },
-                                  error: (error, stackTrace) => ErrorText(
-                                    error: error.toString(),
+                                  Text(
+                                    '${post.commentCount == 0 ? 'Comment' : post.commentCount}',
+                                    style: const TextStyle(
+                                        fontSize: 17, fontFamily: 'carter'),
                                   ),
-                                  loading: () => const Loader(),
-                                ),
-                            GiftAward(post: post),
-                          ],
+                                ],
+                              ),
+                              ref
+                                  .watch(
+                                      communityByNameProvider(post.communityName))
+                                  .when(
+                                    data: (community) {
+                                      if (community.mods.contains(user.uid)) {
+                                        return IconButton(
+                                          onPressed: () {},
+                                          icon: Icon(
+                                            Icons.admin_panel_settings,
+                                            size: 28,
+                                            color: theme == ThemeMode.dark
+                                                ? Pallete.appColorDark
+                                                : Pallete.appColorLight,
+                                          ),
+                                        );
+                                      } else {
+                                        return const SizedBox();
+                                      }
+                                    },
+                                    error: (error, stackTrace) => ErrorText(
+                                      error: error.toString(),
+                                    ),
+                                    loading: () => const Loader(),
+                                  ),
+                              GiftAward(post: post),
+                            ],
+                          ),
                         ),
                       ],
                     ),

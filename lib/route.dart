@@ -11,7 +11,9 @@ import 'package:reddit_clone/Features/posts/screen/comments_screen.dart';
 import 'package:reddit_clone/Features/Home/screens/home_screens.dart';
 import 'package:reddit_clone/Features/user_profile/screens/edit_profile.dart';
 import 'package:reddit_clone/Features/user_profile/screens/user_profile_screen.dart';
+import 'package:reddit_clone/video_check.dart';
 import 'package:routemaster/routemaster.dart';
+
 
 final loggedOutRoute = RouteMap(routes: {
   '/': (_) => const MaterialPage(child: LoginScreen()),
