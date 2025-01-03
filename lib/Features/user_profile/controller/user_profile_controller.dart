@@ -1,7 +1,7 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:reddit_clone/Features/auths/controller/auth_controller.dart';
 import 'package:reddit_clone/core/enums/enums.dart';
 import 'package:reddit_clone/models/post_model.dart';
@@ -44,8 +44,8 @@ class UserProfileController extends StateNotifier<bool> {
         super(false);
 
   void editCommunity({
-    required File? profileFile,
-    required File? bannerFile,
+    required List<XFile> profileFile,
+    required List<XFile> bannerFile,
     required Uint8List? webProfileFile,
     required Uint8List? webBannerFile,
     required BuildContext context,
@@ -53,31 +53,33 @@ class UserProfileController extends StateNotifier<bool> {
     required UserModels user,
   }) async {
     state = true;
-    if (profileFile != null || webProfileFile != null) {
-      final res = await _storageRepository.storeFile(
+    if (profileFile.isNotEmpty || webProfileFile != null) {
+      final res = await _storageRepository.storeFiles(
         path: 'users/profile',
         id: user.uid,
-        file: profileFile,
-        webFile: webProfileFile, 
+        files: profileFile,
+        webFile: webProfileFile,
+        isVideo: false, 
       );
       res.fold((l) {
         // print(l.message);
         showSnackBar(context, l.message);
       }, (r) {
         // print('PROFILE URL : $r');
-        user = user.copyWith(profilePic: r);
+        user = user.copyWith(profilePic: r[0]);
       });
     }
-    if (bannerFile != null || webBannerFile != null) {
-      final res = await _storageRepository.storeFile(
+    if (bannerFile.isNotEmpty || webBannerFile != null) {
+      final res = await _storageRepository.storeFiles(
         path: 'users/banner',
         id: user.uid,
-        file: bannerFile,
-        webFile: webBannerFile
+        files: bannerFile,
+        webFile: webBannerFile,
+        isVideo: false,
       );
       res.fold((l) => showSnackBar(context, l.message), (r) {
         // print('BANNER URL : $r');
-        user = user.copyWith(banner: r);
+        user = user.copyWith(banner: r[0]);
       });
     }
     if (name != null) {

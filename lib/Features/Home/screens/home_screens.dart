@@ -4,6 +4,7 @@ import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_not
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:reddit_clone/Features/auths/controller/auth_controller.dart';
 import 'package:reddit_clone/Features/Home/drawers/community_list_drawer.dart';
 import 'package:reddit_clone/Features/Home/drawers/profile_drawer.dart';
@@ -61,7 +62,7 @@ class _HomeScreensState extends ConsumerState<HomeScreens> {
                   :const Color(0XFFe5e5e5),
               showShadow: false,
               bottomBarHeight: 10,
-              durationInMilliSeconds: 1,
+              durationInMilliSeconds: 300,
               itemLabelStyle: TextStyle(
                 color: theme == ThemeMode.dark
                     ? Colors.white
@@ -72,53 +73,57 @@ class _HomeScreensState extends ConsumerState<HomeScreens> {
               onTap: pageChange,
               bottomBarItems: [
                 BottomBarItem(
-                  inActiveItem: Icon(
-                    Icons.home_outlined,
+                  inActiveItem: FaIcon(
+                    FontAwesomeIcons.home,
                     color: theme == ThemeMode.dark
                         ? Colors.white
                         : const Color.fromARGB(255, 83, 81, 81),
                   ),
                   activeItem: Icon(
-                    Icons.home_filled,
+                    Icons.home,
+                    size: 26,
                     color: theme == ThemeMode.dark ? Colors.black : Colors.white,
                   ),
                   itemLabel: 'Home',
                 ),
                 BottomBarItem(
-                  inActiveItem: Icon(
-                    Icons.add,
+                  inActiveItem: FaIcon(
+                    FontAwesomeIcons.plus,
                     color: theme == ThemeMode.dark
                         ? Colors.white
                         : const Color.fromARGB(255, 83, 81, 81),
                   ),
-                  activeItem: Icon(
-                    Icons.add,
+                  activeItem: FaIcon(
+                    FontAwesomeIcons.plus,
                     color: theme == ThemeMode.dark ? Colors.black : Colors.white,
                   ),
                   itemLabel: 'Create',
                 ),
                 BottomBarItem(
-                  inActiveItem: Icon(
-                    Icons.chat_bubble_outline,
+                  inActiveItem: FaIcon(
+                    FontAwesomeIcons.solidComments,
                     color: theme == ThemeMode.dark
                         ? Colors.white
                         : const Color.fromARGB(255, 83, 81, 81),
                   ),
-                  activeItem: Icon(
-                    Icons.chat_bubble,
-                    color: theme == ThemeMode.dark ? Colors.black : Colors.white,
+                  activeItem: Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: FaIcon(
+                      FontAwesomeIcons.solidComments,
+                      color: theme == ThemeMode.dark ? Colors.black : Colors.white,
+                    ),
                   ),
                   itemLabel: 'Chat',
                 ),
                 BottomBarItem(
-                  inActiveItem: Icon(
-                    Icons.notifications_outlined,
+                  inActiveItem: FaIcon(
+                    FontAwesomeIcons.solidBell,
                     color: theme == ThemeMode.dark
                         ? Colors.white
                         : const Color.fromARGB(255, 83, 81, 81),
                   ),
-                  activeItem: Icon(
-                    Icons.notifications,
+                  activeItem: FaIcon(
+                    FontAwesomeIcons.solidBell,
                     color: theme == ThemeMode.dark ? Colors.black : Colors.white,
                   ),
                   itemLabel: 'Notification',

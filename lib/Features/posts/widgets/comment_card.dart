@@ -24,14 +24,19 @@ class CommentCard extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                GestureDetector(
-                  onTap: () => navigateToUser(context),
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      comment.profilePic,
+                
+                Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: GestureDetector(
+                    onTap: () => navigateToUser(context),
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        comment.profilePic,
+                      ),
+                      radius: 18,
                     ),
-                    radius: 18,
                   ),
                 ),
                 Expanded(
@@ -43,14 +48,15 @@ class CommentCard extends ConsumerWidget {
                         Text(
                           'u/${comment.username}',
                           style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14
+                            fontFamily: 'carter',
+                            fontSize: 16
                           ),
                         ),
                         // const SizedBox(height: 6,),
                         Text(comment.text,style: const TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14
+                            fontFamily: 'carter',
+                            fontSize: 12,
+                            color: Color.fromARGB(255, 188, 186, 186)
                           ),)
                       ],
                     ),

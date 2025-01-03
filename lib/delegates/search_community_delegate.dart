@@ -8,7 +8,17 @@ import 'package:routemaster/routemaster.dart';
 
 class SearchCommunityDelegate extends SearchDelegate {
   final WidgetRef ref;
-  SearchCommunityDelegate({required this.ref});
+
+  SearchCommunityDelegate({required this.ref})
+      : super(
+          searchFieldLabel: 'Search for communities...',
+          searchFieldStyle: const TextStyle(
+            fontFamily: 'carter',
+            fontSize: 16,        
+            fontWeight: FontWeight.w400,
+            color: Colors.grey,  
+          ),
+        );
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -18,12 +28,12 @@ class SearchCommunityDelegate extends SearchDelegate {
         onPressed: () {
           query = '';
         },
-        icon:  Icon(
+        icon: Icon(
           Icons.search,
-          size: 30,
+          size: 32,
           color: theme == ThemeMode.dark
-            ? Pallete.appColorDark
-            : Pallete.appColorLight,
+              ? Pallete.appColorDark
+              : Pallete.appColorLight,
         ),
       ),
     ];
@@ -68,9 +78,9 @@ class SearchCommunityDelegate extends SearchDelegate {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: (theme == ThemeMode.dark
+                        color: theme == ThemeMode.dark
                             ? Pallete.appColorDark
-                            : Pallete.appColorLight),
+                            : Pallete.appColorLight,
                         width: 2,
                       ),
                       image: DecorationImage(

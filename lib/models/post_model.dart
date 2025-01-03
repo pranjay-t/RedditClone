@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 class Post {
   final String id;
   final String title;
-  final String? link;
+  final List<String> link;
   final String? description;
   final String communityName;
   final String communityProfilePic;
@@ -18,7 +18,7 @@ class Post {
   Post({
     required this.id,
     required this.title,
-    this.link,
+    required this.link,
     this.description,
     required this.communityName,
     required this.communityProfilePic,
@@ -35,7 +35,7 @@ class Post {
   Post copyWith({
     String? id,
     String? title,
-    String? link,
+    List<String>? link,
     String? description,
     String? communityName,
     String? communityProfilePic,
@@ -89,7 +89,7 @@ class Post {
     return Post(
       id: map['id'] ?? '',
       title: map['title'] ?? '',
-      link: map['link'],
+      link: List<String>.from(map['link']),
       description: map['description'],
       communityName: map['communityName'] ?? '',
       communityProfilePic: map['communityProfilePic'] ?? '',
@@ -106,7 +106,7 @@ class Post {
 
   @override
   String toString() {
-    return 'Post(id: $id, title: $title, link: $link, description: $description, communityName: $communityName, communityProfilePic: $communityProfilePic, upvotes: $upvotes, downvotes: $downvotes, commentCount: $commentCount, username: $username, uid: $uid, type: $type, createdAt: $createdAt, awards: $awards)';
+    return 'Post(id: $id, title: $title, link: $link, description: $description, communityName: $communityName, communityProfilePic: $communityProfilePic, upvotes: $upvotes, downvotes: $downvotes, commentCount: $commentCount, username: $username, uid: $uid, type: $type, createdAt: $createdAt, awards: $awards,)';
   }
 
   @override
@@ -116,7 +116,7 @@ class Post {
     return other is Post &&
         other.id == id &&
         other.title == title &&
-        other.link == link &&
+        listEquals(other.link, link) &&
         other.description == description &&
         other.communityName == communityName &&
         other.communityProfilePic == communityProfilePic &&

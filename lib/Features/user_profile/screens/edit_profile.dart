@@ -3,6 +3,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:reddit_clone/Features/Community/controller/community_controller.dart';
 import 'package:reddit_clone/Features/auths/controller/auth_controller.dart';
 import 'package:reddit_clone/Resposive/responsive.dart';
@@ -68,14 +69,14 @@ class _EditProfileState extends ConsumerState<EditProfile> {
 
   void saveProfile(String name, UserModels user) {
     ref.watch(userProfileControllerProvider.notifier).editCommunity(
-          profileFile: profileFile,
-          bannerFile: bannerFile,
-          webBannerFile: webBannerFile,
-          webProfileFile: webProfileFile,
-          context: context,
-          name: name,
-          user: user,
-        );
+      profileFile: [XFile(profileFile!.path)], //saving as list of file
+      bannerFile: [XFile(bannerFile!.path)], //saving as list of file
+      webBannerFile: webBannerFile,
+      webProfileFile: webProfileFile,
+      context: context,
+      name: name,
+      user: user,
+    );
     Routemaster.of(context).pop();
   }
 
@@ -87,13 +88,37 @@ class _EditProfileState extends ConsumerState<EditProfile> {
           data: (user) {
             return Scaffold(
               appBar: AppBar(
-                title: const Text('Edit Profile'),
+                title: Text(
+                  'Edit Profile',
+                  style: TextStyle(
+                    fontFamily: 'carter',
+                    color: currentTheme == Pallete.darkModeAppTheme
+                        ? Pallete.appColorDark
+                        : Pallete.appColorLight,
+                  ),
+                ),
                 actions: [
                   TextButton(
                     onPressed: () => saveProfile(nameController.text, user),
-                    child: const Text('save'),
+                    child: Text(
+                      'save',
+                      style: TextStyle(
+                        fontFamily: 'carter',
+                        fontSize: 17,
+                        color: currentTheme == Pallete.darkModeAppTheme
+                            ? Pallete.appColorDark
+                            : Pallete.appColorLight,
+                      ),
+                    ),
                   ),
                 ],
+                leading: IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new,
+                    size: 30,
+                  ),
+                ),
               ),
               body: isLoading
                   ? const Loader()
@@ -113,8 +138,10 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                                       borderType: BorderType.RRect,
                                       dashPattern: const [10, 4],
                                       strokeCap: StrokeCap.round,
-                                      color: currentTheme
-                                          .textTheme.bodyMedium!.color!,
+                                      color: currentTheme ==
+                                              Pallete.darkModeAppTheme
+                                          ? Pallete.appColorDark
+                                          : Pallete.appColorLight,
                                       child: Container(
                                         clipBehavior: Clip.antiAlias,
                                         height: 200,
@@ -177,12 +204,16 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                                   decoration: InputDecoration(
                                     hintText: 'Name',
                                     border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(15),
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(15),
-                                      borderSide:
-                                          BorderSide(color: Pallete.blueColor),
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(
+                                        color: currentTheme ==
+                                                Pallete.darkModeAppTheme
+                                            ? Pallete.appColorDark
+                                            : Pallete.appColorLight,
+                                      ),
                                     ),
                                   ))
                             ],

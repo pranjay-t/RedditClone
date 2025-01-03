@@ -59,12 +59,12 @@ class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
 
   void saveFile(CommunityModel community) {
     ref.watch(communityControllerProvider.notifier).editCommunity(
-        profileFile: profileFile,
-        bannerFile: bannerFile,
-        webBannerFile: webBannerFile,
-        webProfileFile: webProfileFile,
-        context: context,
-        community: community,
+          profileFile: profileFile,
+          bannerFile: bannerFile,
+          webBannerFile: webBannerFile,
+          webProfileFile: webProfileFile,
+          context: context,
+          community: community,
         );
   }
 
@@ -76,11 +76,35 @@ class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
           data: (community) {
             return Scaffold(
               appBar: AppBar(
-                title: const Text('Edit Community'),
+                title: Text(
+                  'Edit Community',
+                  style: TextStyle(
+                    fontFamily: 'carter',
+                    color: currentTheme == Pallete.darkModeAppTheme
+                        ? Pallete.appColorDark
+                        : Pallete.appColorLight,
+                  ),
+                ),
+                leading: IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new,
+                    size: 30,
+                  ),
+                ),
                 actions: [
                   TextButton(
                     onPressed: () => saveFile(community),
-                    child: const Text('save'),
+                    child: Text(
+                      'save',
+                      style: TextStyle(
+                        fontFamily: 'carter',
+                        fontSize: 17,
+                        color: currentTheme == Pallete.darkModeAppTheme
+                            ? Pallete.appColorDark
+                            : Pallete.appColorLight,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -102,8 +126,10 @@ class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
                                       borderType: BorderType.RRect,
                                       dashPattern: const [10, 4],
                                       strokeCap: StrokeCap.round,
-                                      color: currentTheme
-                                          .textTheme.bodyMedium!.color!,
+                                      color: currentTheme ==
+                                              Pallete.darkModeAppTheme
+                                          ? Pallete.appColorDark
+                                          : Pallete.appColorLight,
                                       child: Container(
                                         clipBehavior: Clip.antiAlias,
                                         height: 200,
@@ -121,11 +147,18 @@ class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
                                                         community.banner ==
                                                             Constants
                                                                 .bannerDefault
-                                                    ? const Center(
+                                                    ? Center(
                                                         child: Icon(
                                                           Icons
                                                               .camera_alt_outlined,
                                                           size: 50,
+                                                          color: currentTheme ==
+                                                                  Pallete
+                                                                      .darkModeAppTheme
+                                                              ? Pallete
+                                                                  .appColorDark
+                                                              : Pallete
+                                                                  .appColorLight,
                                                         ),
                                                       )
                                                     : Image.network(
@@ -142,8 +175,9 @@ class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
                                       onTap: selectProfileImage,
                                       child: webProfileFile != null
                                           ? CircleAvatar(
-                                            radius: 33,
-                                            backgroundImage: MemoryImage(webProfileFile!),
+                                              radius: 33,
+                                              backgroundImage:
+                                                  MemoryImage(webProfileFile!),
                                             )
                                           : profileFile != null
                                               ? CircleAvatar(

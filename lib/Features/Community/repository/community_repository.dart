@@ -149,6 +149,7 @@ class CommunityRepository {
               .toList(),
         );
   }
+  
   CollectionReference get _communities =>
       _firestore.collection(FirebaseConstants.communitiesCollection);
 

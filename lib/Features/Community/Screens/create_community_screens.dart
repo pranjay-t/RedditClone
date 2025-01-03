@@ -19,21 +19,6 @@ class _CreateCommunityScreensState
   final _communityNameController = TextEditingController();
   final _descriptionNameController = TextEditingController();
 
-  String _errorMessage = '';
-
-  void _validateInput(String input) {
-    if (RegExp(r'^[a-zA-Z0-9_]*$').hasMatch(input)) {
-      setState(() {
-        _errorMessage = '';
-      });
-    } else {
-      setState(() {
-        _errorMessage =
-            'Crew names must be between 3-20 characters and can only contain letters,numbers, or underscores.';
-      });
-    }
-  }
-
   @override
   void dispose() {
     super.dispose();
@@ -42,9 +27,11 @@ class _CreateCommunityScreensState
   }
 
   void createCommunity() {
+    final communityName = _communityNameController.text.trim();
+    if (communityName.isEmpty) return;
     ref
         .watch(communityControllerProvider.notifier)
-        .createCommunity(_communityNameController.text.trim(), context);
+        .createCommunity(communityName, context);
   }
 
   @override
@@ -63,9 +50,14 @@ class _CreateCommunityScreensState
               ? Pallete.appColorDark
               : Pallete.appColorLight,
         ),
-        title:  Text(
+        title: Text(
           'Create a community',
-          style: TextStyle(fontFamily: 'carter',color:  (theme == ThemeMode.dark ? Pallete.appColorDark : Pallete.appColorLight),),
+          style: TextStyle(
+            fontFamily: 'carter',
+            color: (theme == ThemeMode.dark
+                ? Pallete.appColorDark
+                : Pallete.appColorLight),
+          ),
         ),
       ),
       body: Center(
@@ -106,9 +98,8 @@ class _CreateCommunityScreensState
                         height: 15,
                       ),
                       TextField(
-                        controller: _descriptionNameController,
+                        controller: _communityNameController,
                         maxLength: 20,
-                        onChanged: _validateInput,
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
                             RegExp(r'^[a-zA-Z0-9_]*$'),
@@ -126,32 +117,34 @@ class _CreateCommunityScreensState
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
-                              color:  (theme == ThemeMode.dark ? Pallete.appColorDark : Pallete.appColorLight),
+                              color: (theme == ThemeMode.dark
+                                  ? Pallete.appColorDark
+                                  : Pallete.appColorLight),
                             ),
                           ),
-                          errorText:
-                              _errorMessage.isEmpty ? null : _errorMessage,
                         ),
                       ),
                       const SizedBox(
                         height: 15,
                       ),
                       TextField(
-                        controller: _communityNameController,
+                        controller: _descriptionNameController,
                         maxLength: 500,
                         maxLines: 2,
-                        decoration:  InputDecoration(
-                          hintText: 'Description',
-                          hintStyle:
-                              const TextStyle(fontFamily: 'carter', fontSize: 15),
+                        decoration: InputDecoration(
+                          hintText: 'Description (optional)',
+                          hintStyle: const TextStyle(
+                              fontFamily: 'carter', fontSize: 15),
                           filled: true,
-                          border:const OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
-                              color:  (theme == ThemeMode.dark ? Pallete.appColorDark : Pallete.appColorLight),
+                              color: (theme == ThemeMode.dark
+                                  ? Pallete.appColorDark
+                                  : Pallete.appColorLight),
                             ),
                           ),
                         ),
@@ -164,16 +157,20 @@ class _CreateCommunityScreensState
                         child: ElevatedButton(
                           onPressed: createCommunity,
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: (theme == ThemeMode.dark ? Pallete.appColorDark : Pallete.appColorLight),
+                              backgroundColor: (theme == ThemeMode.dark
+                                  ? Pallete.appColorDark
+                                  : Pallete.appColorLight),
                               minimumSize: const Size(double.infinity, 50),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               )),
-                          child:  Text(
+                          child: Text(
                             "Create Community",
                             style: TextStyle(
                               fontSize: 18,
-                              color:  theme == ThemeMode.dark ? Colors.black: Colors.white,
+                              color: theme == ThemeMode.dark
+                                  ? Colors.black
+                                  : Colors.white,
                               fontFamily: 'carter',
                             ),
                           ),

@@ -4,14 +4,11 @@ import 'package:reddit_clone/Features/auths/controller/auth_controller.dart';
 import 'package:reddit_clone/Theme/pallete.dart';
 import 'package:reddit_clone/core/constants/constants.dart';
 
-class SignInButtons extends ConsumerWidget {
-  final bool isFromLogin;
-  const SignInButtons({super.key, this.isFromLogin = true});
+class GuestButton extends ConsumerWidget {
+  const GuestButton({super.key});
 
-  void signInWithGoogle(BuildContext context, WidgetRef ref) {
-    ref
-        .read(authControllerProvider.notifier)
-        .signInWithGoogle(context, isFromLogin);
+  void signInWithGuest(WidgetRef ref, BuildContext context) {
+    ref.read(authControllerProvider.notifier).signInWithGuest(context);
   }
 
   @override
@@ -27,24 +24,27 @@ class SignInButtons extends ConsumerWidget {
           borderRadius: BorderRadius.circular(12),
         ),
       ),
-      onPressed: () => signInWithGoogle(context, ref),
+      onPressed: () => signInWithGuest(ref, context),
       child: Padding(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(15),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              Constants.googlePath,
-              height: 40,
-            ),
-            const SizedBox(width: 10,),
             Text(
-              "Continue with Google",
+              "Guest",
               style: TextStyle(
-                  color:theme == ThemeMode.dark ? Colors.black : Colors.white,
-                  fontSize: 18,
+                  color: theme == ThemeMode.dark ? Colors.black : Colors.white,
+                  fontSize: 20,
                   fontFamily: 'carter'),
             ),
+            const SizedBox(width: 10,),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: theme == ThemeMode.dark
+                  ? Pallete.appColorDark
+                  : Pallete.appColorLight,
+              size: 22,
+            )
           ],
         ),
       ),

@@ -8,6 +8,7 @@ import 'package:routemaster/routemaster.dart';
 
 class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
   const HomeAppBar({super.key});
+  
   void displayMenuDrawer(BuildContext context) {
     Scaffold.of(context).openDrawer();
   }
@@ -20,14 +21,14 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = ref.watch(themeNotifierProvider.notifier).mode;
+    final theme = ref.watch(themeNotifierProvider);
     return AppBar(
       title: Text(
         'SoSoulize',
         style: TextStyle(
-            color: theme == ThemeMode.dark
-                ? Pallete.appColorDark
-                : Pallete.appColorLight,
+            color: theme == Pallete.darkModeAppTheme
+              ? Pallete.appColorDark 
+              : Pallete.appColorLight,
             fontFamily: 'carter',
             fontSize: 30),
       ),
@@ -35,13 +36,10 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
       leading: Builder(builder: (context) {
         return IconButton(
           onPressed: () => displayMenuDrawer(context),
-          icon: Icon(
+          icon:const Icon(
             Icons.menu,
             weight: 2,
             size: 35,
-            color: theme == ThemeMode.dark
-                ? Pallete.appColorDark
-                : Pallete.appColorLight,
           ),
         );
       }),
@@ -49,12 +47,9 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
         IconButton(
           onPressed: () => showSearch(
               context: context, delegate: SearchCommunityDelegate(ref: ref)),
-          icon: Icon(
+          icon:const Icon(
             Icons.search,
             size: 30,
-            color: theme == ThemeMode.dark
-                ? Pallete.appColorDark
-                : Pallete.appColorLight,
           ),
         ),
         if (kIsWeb)

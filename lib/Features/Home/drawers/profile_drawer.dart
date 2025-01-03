@@ -87,10 +87,10 @@ class ProfileDrawer extends ConsumerWidget {
               value: theme ==
                 ThemeMode.dark,
               onChanged: (val) => toggleTheme(ref),
-              activeTrackColor: Colors.white,
-              inactiveTrackColor: Colors.white,
+              activeTrackColor: Pallete.appColorDark,
+              inactiveTrackColor: Pallete.appColorLight,
               activeColor: Colors.black,
-              inactiveThumbColor: Colors.blue,
+              inactiveThumbColor: Colors.white,
             ),
             ),
         ],

@@ -4,6 +4,8 @@ import 'package:reddit_clone/Features/auths/controller/auth_controller.dart';
 import 'package:reddit_clone/Theme/pallete.dart';
 import 'package:reddit_clone/core/commons/loader.dart';
 import 'package:reddit_clone/core/commons/post_card.dart';
+import 'package:reddit_clone/core/commons/profile_buttons.dart';
+import 'package:reddit_clone/core/commons/profile_icon.dart';
 import 'package:reddit_clone/core/constants/error_text.dart';
 import 'package:reddit_clone/Features/user_profile/controller/user_profile_controller.dart';
 import 'package:routemaster/routemaster.dart';
@@ -18,13 +20,20 @@ class UserProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
+
   void navigateToEditProfile(BuildContext context) {
     Routemaster.of(context).push('/edit-profile/${widget.uid}');
+  }
+
+  void navigateToMessageScreen(BuildContext context,String receiverId) {
+    Routemaster.of(context).push('/message/$receiverId');
   }
 
   @override
   Widget build(BuildContext context) {
     final mainUser = ref.watch(userProvider)!.uid;
+    final theme = ref.watch(themeNotifierProvider.notifier).mode;
+    final isGuest = !ref.watch(userProvider)!.isAuthenticated;
     return Scaffold(
       body: ref.watch(getUserDataProvider(widget.uid)).when(
             data: (user) {
@@ -32,6 +41,15 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                 headerSliverBuilder: (context, innerBoxIsScrolled) {
                   return [
                     SliverAppBar(
+                      leading: IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: Icon(
+                          Icons.arrow_back_ios_new,
+                          color: theme == ThemeMode.dark
+                              ? Pallete.appColorDark
+                              : Pallete.appColorLight,
+                        ),
+                      ),
                       expandedHeight: 200,
                       floating: true,
                       snap: true,
@@ -43,69 +61,63 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                               fit: BoxFit.cover,
                             ),
                           ),
-                        if(user.uid == mainUser)
                           Align(
                             alignment: Alignment.bottomLeft,
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.only(bottom: 10, left: 16),
-                              child: OutlinedButton(
-                                onPressed: () => navigateToEditProfile(context),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Pallete.greyColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    side: BorderSide.none,
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 25,
-                                  ),
-                                ),
-                                child: const Text(
-                                  'Edit Profile',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomLeft,
-                            child: Padding(
-                              padding:
-                                   EdgeInsets.only(bottom: user.uid == mainUser ? 70 : 10, left: 30),
-                              child: CircleAvatar(
-                                backgroundImage: NetworkImage(user.profilePic),
-                                radius: 40,
-                              ),
+                              padding: EdgeInsets.only(
+                                  bottom: user.uid == mainUser ? 48 : 48,
+                                  left: 20),
+                              child: const ProfileIcon(radius: 100),
                             ),
                           ),
                         ],
                       ),
+                      bottom: AppBar(
+                        automaticallyImplyLeading: false,
+                        elevation: 0,
+                        title: Padding(
+                          padding: const EdgeInsets.only(left: 10, top: 26),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              FittedBox(
+                                child: Text(
+                                  user.name,
+                                  style: const TextStyle(
+                                      fontSize: 22, fontFamily: 'carter'),
+                                ),
+                              ),
+                            if(!isGuest)
+                              user.uid == mainUser
+                                ? ProfileButtons(
+                                  label: 'Edit Profile',
+                                  onPressed: () =>
+                                      navigateToEditProfile(context),
+                                )
+                              : ProfileButtons(
+                                label: 'Message',
+                                onPressed: () => navigateToMessageScreen(context,user.uid),
+                              ),
+                            ],
+                          ),
+                        ),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30)),
+                        ),
+                      ),
                     ),
                     SliverPadding(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.only(left: 26),
                       sliver: SliverList(
                         delegate: SliverChildListDelegate(
                           [
-                            const SizedBox(
-                              height: 5,
+                            Text(
+                              'u/${user.name} • ${user.karma} karma',
+                              style: const TextStyle(
+                                  fontSize: 14, fontFamily: 'carter'),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'u/${user.name}',
-                                  style: const TextStyle(
-                                    fontSize: 19,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: Text('${user.karma} karma'),
-                            )
                           ],
                         ),
                       ),
@@ -113,7 +125,7 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                   ];
                 },
                 body: Padding(
-                  padding:const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: ref.watch(getUserPostsProvider(user.uid)).when(
                         data: (posts) {
                           return ListView.builder(
@@ -127,8 +139,8 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                           );
                         },
                         error: (error, stackTrace) {
-                          // print(error);
-                            return ErrorText(error: error.toString());},
+                          return ErrorText(error: error.toString());
+                        },
                         loading: () => const Loader(),
                       ),
                 ),

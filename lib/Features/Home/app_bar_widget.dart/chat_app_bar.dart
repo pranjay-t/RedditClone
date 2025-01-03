@@ -12,21 +12,38 @@ class ChatAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = ref.watch(themeNotifierProvider.notifier).mode;
+    final theme = ref.watch(themeNotifierProvider);
     return AppBar(
-        title:  Text('Chats ',style: TextStyle(fontFamily: 'carter',color:  (theme == ThemeMode.dark ? Pallete.appColorDark : Pallete.appColorLight),),),
-        centerTitle: false,
-        leading: Builder(builder: (context) {
-          return IconButton(
-            onPressed: () => displayMenuDrawer(context),
-            icon:  Icon(Icons.menu,size: 35,color:  (theme == ThemeMode.dark ? Pallete.appColorDark : Pallete.appColorLight),),
-          );
-        }),
-        actions: const[
-           ProfileIcon(radius: 35,),
-        ],
-      );
+      title: Text(
+        'Chats ',
+        style: TextStyle(
+          fontFamily: 'carter',
+          color: theme == Pallete.darkModeAppTheme
+              ? Pallete.appColorDark 
+              : Pallete.appColorLight,
+        ),
+      ),
+      centerTitle: false,
+      leading: Builder(builder: (context) {
+        return IconButton(
+          onPressed: () => displayMenuDrawer(context),
+          icon: Icon(
+            Icons.menu,
+            size: 35,
+            color: theme == Pallete.darkModeAppTheme
+                ? Pallete.appColorDark
+                : Pallete.appColorLight,
+          ),
+        );
+      }),
+      actions: const [
+        ProfileIcon(
+          radius: 35,
+        ),
+      ],
+    );
   }
+
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

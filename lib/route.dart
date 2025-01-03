@@ -5,13 +5,13 @@ import 'package:reddit_clone/Features/Community/Screens/create_community_screens
 import 'package:reddit_clone/Features/Community/Screens/edit_community_screen.dart';
 import 'package:reddit_clone/Features/Community/Screens/mod_tools_screen.dart';
 import 'package:reddit_clone/Features/auths/screens/login_screen.dart';
+import 'package:reddit_clone/Features/chat/screens/message_screen.dart';
 import 'package:reddit_clone/Features/posts/screen/add_post_screen.dart';
 import 'package:reddit_clone/Features/posts/screen/add_post_type_screen.dart';
 import 'package:reddit_clone/Features/posts/screen/comments_screen.dart';
 import 'package:reddit_clone/Features/Home/screens/home_screens.dart';
 import 'package:reddit_clone/Features/user_profile/screens/edit_profile.dart';
 import 'package:reddit_clone/Features/user_profile/screens/user_profile_screen.dart';
-import 'package:reddit_clone/video_check.dart';
 import 'package:routemaster/routemaster.dart';
 
 
@@ -47,4 +47,5 @@ final loggedInRoute = RouteMap(routes: {
 
   '/add-posts': (_) => const MaterialPage(child: AddPostScreen()),
 
+  '/message/:receiverId': (route) => MaterialPage(child: MessageScreen(receiverId: route.pathParameters['receiverId']!,)),
 });

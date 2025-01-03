@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:reddit_clone/Theme/pallete.dart';
 import 'package:routemaster/routemaster.dart';
 
@@ -15,7 +16,7 @@ class AddPostScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     double cardSize = kIsWeb ? 360 : 120;
     double iconSize = kIsWeb ? 90 : 50;
-    final theme = ref.watch(themeNotifierProvider.notifier).mode;
+    final theme = ref.watch(themeNotifierProvider);
     return Scaffold(
       body: Align(
         alignment: Alignment.topCenter,
@@ -30,7 +31,7 @@ class AddPostScreen extends ConsumerWidget {
                   child: Icon(
                     Icons.image_outlined,
                     size: iconSize,
-                    color: theme == ThemeMode.dark
+                    color: theme == Pallete.darkModeAppTheme
                         ? Pallete.appColorDark
                         : Pallete.appColorLight,
                   ),
@@ -46,7 +47,7 @@ class AddPostScreen extends ConsumerWidget {
                   child: Icon(
                     Icons.play_circle,
                     size: iconSize,
-                    color: theme == ThemeMode.dark
+                    color: theme == Pallete.darkModeAppTheme
                         ? Pallete.appColorDark
                         : Pallete.appColorLight,
                   ),
@@ -59,12 +60,14 @@ class AddPostScreen extends ConsumerWidget {
                 height: cardSize,
                 width: cardSize,
                 child: Card(
-                  child: Icon(
-                    Icons.link,
-                    size: iconSize,
-                    color: theme == ThemeMode.dark
-                        ? Pallete.appColorDark
-                        : Pallete.appColorLight,
+                  child: Center(
+                    child: FaIcon(
+                      FontAwesomeIcons.link,
+                      size: 38,
+                      color: theme == Pallete.darkModeAppTheme
+                          ? Pallete.appColorDark
+                          : Pallete.appColorLight,
+                    ),
                   ),
                 ),
               ),
@@ -78,7 +81,7 @@ class AddPostScreen extends ConsumerWidget {
                   child: Icon(
                     Icons.text_format,
                     size: iconSize,
-                    color: theme == ThemeMode.dark
+                    color: theme == Pallete.darkModeAppTheme
                         ? Pallete.appColorDark
                         : Pallete.appColorLight,
                   ),

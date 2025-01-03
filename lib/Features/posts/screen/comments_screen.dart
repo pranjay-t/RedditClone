@@ -4,6 +4,7 @@ import 'package:reddit_clone/Features/auths/controller/auth_controller.dart';
 import 'package:reddit_clone/Resposive/responsive.dart';
 import 'package:reddit_clone/Features/posts/controller/post_controller.dart';
 import 'package:reddit_clone/Features/posts/widgets/comment_card.dart';
+import 'package:reddit_clone/Theme/pallete.dart';
 import 'package:reddit_clone/core/commons/loader.dart';
 import 'package:reddit_clone/core/commons/post_card.dart';
 import 'package:reddit_clone/core/constants/error_text.dart';
@@ -29,9 +30,11 @@ class _CommentsScreenState extends ConsumerState<CommentsScreen> {
   }
 
   void addComment(String postId) {
+    final comment = commentController.text.trim();
+    if (comment.isEmpty) return;
     ref.read(postControllerProvider.notifier).addComment(
           context: context,
-          text: commentController.text.trim(),
+          text: comment,
           postId: postId,
         );
     setState(() {
@@ -43,47 +46,68 @@ class _CommentsScreenState extends ConsumerState<CommentsScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider)!;
     final isGuest = !user.isAuthenticated;
+    final theme = ref.watch(themeNotifierProvider.notifier).mode;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            size: 30,
+          ),
+        ),
+      ),
       body: ref.watch(getPostByIdProvider(widget.postId)).when(
             data: (post) {
-              return Center(
-                child: Responsive(
+              return Responsive(
+                child: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       children: [
                         PostCard(post: post),
                         if (!isGuest)
-                          TextField(
-                            onSubmitted: (val) => addComment(post.id),
-                            controller: commentController,
-                            decoration: const InputDecoration(
-                              hintText: 'Comment your thoughts!',
-                              filled: true,
-                              border: InputBorder.none,
+                        TextField(
+                          onSubmitted: (val) => addComment(post.id),
+                          controller: commentController,
+                          decoration: InputDecoration(
+                            hintText: 'Comment your thoughts!',
+                            filled: true,
+                            border: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
                             ),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(10)),
+                                borderSide: BorderSide(
+                                  color: theme == ThemeMode.dark
+                                      ? Pallete.appColorDark
+                                      : Pallete.appColorLight,
+                                )),
                           ),
+                        ),
                         ref.watch(getPostCommentProvider(widget.postId)).when(
                               data: (data) {
-                                return Expanded(
-                                  child: ListView.builder(
-                                    itemCount: data.length,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      final comment = data[index];
-                                      return CommentCard(comment: comment);
-                                    },
-                                  ),
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: data.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    final comment = data[index];
+                                    return CommentCard(comment: comment);
+                                  },
                                 );
                               },
                               error: (error, stackTrace) {
-                                // print(error);
                                 return ErrorText(
                                   error: error.toString(),
                                 );
                               },
                               loading: () => const Loader(),
                             ),
+                        
                       ],
                     ),
                   ),
@@ -98,3 +122,23 @@ class _CommentsScreenState extends ConsumerState<CommentsScreen> {
     );
   }
 }
+
+// if (!isGuest)
+//                           TextField(
+//                             onSubmitted: (val) => addComment(post.id),
+//                             controller: commentController,
+//                             decoration:  InputDecoration(
+//                               hintText: 'Comment your thoughts!',
+//                               filled: true,
+//                               border:const OutlineInputBorder(
+//                                 borderRadius: BorderRadius.all(Radius.circular(10)),
+                                
+//                               ),
+//                               focusedBorder: OutlineInputBorder(
+//                                 borderRadius:const BorderRadius.all(Radius.circular(10)),
+//                                 borderSide: BorderSide(
+//                                   color: theme == ThemeMode.dark ? Pallete.appColorDark : Pallete.appColorLight,
+//                                 )
+//                               ),
+//                             ),
+//                           ),

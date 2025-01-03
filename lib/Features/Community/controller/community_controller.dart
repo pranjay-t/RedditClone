@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:reddit_clone/Features/Community/repository/community_repository.dart';
 import 'package:reddit_clone/Features/auths/controller/auth_controller.dart';
 import 'package:reddit_clone/core/constants/constants.dart';
@@ -57,6 +58,7 @@ class CommunityController extends StateNotifier<bool> {
   void createCommunity(String name, BuildContext context) async {
     state = true;
     final uid = _ref.read(userProvider)!.uid;
+    
     CommunityModel community = CommunityModel(
       id: name,
       name: name,
@@ -127,27 +129,27 @@ class CommunityController extends StateNotifier<bool> {
   }) async {
     state = true;
     if (profileFile != null || webProfileFile != null) {
-      final res = await _storageRepository.storeFile(
+      final res = await _storageRepository.storeFiles(
         path: 'communities/profile',
         id: community.name,
-        file: profileFile,
-        webFile: webProfileFile,
+        files: [XFile(profileFile!.path)],
+        webFile: webProfileFile, isVideo: false,
       );
       res.fold((l) {
         showSnackBar(context, l.message);
       }, (r) {
-        community = community.copyWith(avatar: r);
+        community = community.copyWith(avatar: r[0]);
       });
     }
     if (bannerFile != null || webBannerFile != null) {
-      final res = await _storageRepository.storeFile(
+      final res = await _storageRepository.storeFiles(
         path: 'communities/banner',
         id: community.name,
-        file: bannerFile,
-        webFile: webBannerFile,
+        files: [XFile(bannerFile!.path)],
+        webFile: webBannerFile, isVideo: false,
       );
       res.fold((l) => showSnackBar(context, l.message), (r) {
-        community = community.copyWith(banner: r);
+        community = community.copyWith(banner: r[0]);
       });
     }
     final res = await _communityRepository.editCommunity(community);
@@ -166,4 +168,5 @@ class CommunityController extends StateNotifier<bool> {
   Stream<List<Post>> getUserCommunityPosts(String communityName) {
     return _communityRepository.getUserCommunityPosts(communityName);
   }
+
 }

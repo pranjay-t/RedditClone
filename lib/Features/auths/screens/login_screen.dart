@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/Features/auths/controller/auth_controller.dart';
 import 'package:reddit_clone/Resposive/responsive.dart';
+import 'package:reddit_clone/Theme/pallete.dart';
+import 'package:reddit_clone/core/commons/guest_button.dart';
 import 'package:reddit_clone/core/commons/loader.dart';
 import 'package:reddit_clone/core/commons/sign_in_buttons.dart';
 import 'package:reddit_clone/core/constants/constants.dart';
@@ -9,60 +11,92 @@ import 'package:reddit_clone/core/constants/constants.dart';
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
 
-  void signInWithGuest(WidgetRef ref, BuildContext context) {
-    ref.read(authControllerProvider.notifier).signInWithGuest(context);
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoading = ref.watch(authControllerProvider);
-
+    final theme = ref.watch(themeNotifierProvider.notifier).mode;
     return Scaffold(
-      appBar: AppBar(
-        title: Image.asset(
-          Constants.logoPath,
-          height: 35,
+      backgroundColor: theme == ThemeMode.dark
+          ? Pallete.appColorDark
+          : Pallete.appColorLight,
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            height: 600,
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: isLoading
+                ? const Loader()
+                : Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    color: theme == ThemeMode.dark
+                        ? const Color.fromARGB(255, 37, 37, 37)
+                        : const Color.fromARGB(255, 240, 230, 230),
+                    elevation: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(children: [
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Text(
+                          "Let's Go !",
+                          style: TextStyle(
+                            fontSize: 35,
+                            fontFamily: 'carter',
+                            color: theme == ThemeMode.dark
+                                ? Pallete.appColorDark
+                                : Pallete.appColorLight,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Image.asset(
+                          Constants.loginEmotePath,
+                          height: 200,
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Text(
+                          "Every soul deserves a community.",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: 'carter',
+                            color: theme == ThemeMode.dark
+                                ? Pallete.appColorDark
+                                : Pallete.appColorLight,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        const Responsive(child: SignInButtons()),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'OR',
+                          style: TextStyle(
+                            fontFamily: 'carter',
+                            fontSize: 18,
+                            color: theme == ThemeMode.dark
+                                ? Pallete.appColorDark
+                                : Pallete.appColorLight,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        const Responsive(child: GuestButton()),
+                      ]),
+                    ),
+                  ),
+          ),
         ),
-        centerTitle: true,
-        actions: [
-          Padding(
-              padding: const EdgeInsets.all(10),
-              child: TextButton(
-                  onPressed: () => signInWithGuest(ref, context),
-                  child: const Text(
-                    'Skip',
-                    style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),
-                  ))),
-        ],
-      ),
-      body: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 10),
-        child: isLoading
-            ? const Loader()
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Dive into Anything !",
-                    style: TextStyle(fontSize: 25),
-                  ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  Image.asset(
-                    Constants.loginEmotePath,
-                    height : 400,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Responsive(child: SignInButtons()),
-                ],
-              ),
       ),
     );
   }

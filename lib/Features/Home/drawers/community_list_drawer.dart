@@ -30,12 +30,15 @@ class CommunityListDrawer extends ConsumerWidget {
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 10),
-            child: Text('Your Communities',style: TextStyle(fontFamily: 'carter'),),
+           Padding(
+            padding:const EdgeInsets.only(left: 10,top: 10),
+            child: Text(isGuest ? 'LogIn to Enjoy More!':'Your Communities',style:const TextStyle(fontFamily: 'carter',fontSize: 17),),
           ),
           isGuest
-              ? const SignInButtons()
+              ? const Padding(
+                padding:  EdgeInsets.all(10),
+                child: FittedBox(child:  SignInButtons()),
+              )
               : ListTile(
                   onTap: () => navigateToCreateCommunity(context),
                   leading: const Icon(Icons.add,size: 30,),

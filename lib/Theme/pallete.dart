@@ -7,7 +7,6 @@ final themeNotifierProvider = StateNotifierProvider<ThemeNotifier,ThemeData>((re
 });
 
 class Pallete {
-  // Colors
   static const blackColor = Color.fromRGBO(1, 1, 1, 1); // primary color
   static const greyColor = Color.fromRGBO(26, 39, 45, 1); // secondary color
   static const drawerColor = Color.fromRGBO(8, 8, 8, 1);
@@ -15,7 +14,6 @@ class Pallete {
   static var redColor = Colors.red.shade500;
   static var blueColor = Colors.blue.shade300;
   static var appColorDark = const Color.fromARGB(255,224,255,85);
-  // static var appColorLight = const Color(0xFF006D77);
   static var appColorLight = const Color(0xFFe63946);
 
 
@@ -25,12 +23,12 @@ class Pallete {
   
   static var darkModeAppTheme = ThemeData.dark().copyWith(
     scaffoldBackgroundColor: blackColor,
-    cardColor: greyColor,
-    // textTheme: GoogleFonts.carterOneTextTheme(),
+    cardColor: whiteColor,
     appBarTheme: const AppBarTheme(
       backgroundColor: drawerColor,
+      
       iconTheme: IconThemeData(
-        color: whiteColor,
+        color: Color.fromARGB(255,224,255,85),
       ),
     ),
     drawerTheme: const DrawerThemeData(
@@ -44,13 +42,12 @@ class Pallete {
   static var lightModeAppTheme = ThemeData.light().copyWith(
     scaffoldBackgroundColor: whiteColor,
     cardColor: greyColor,
-    // textTheme: GoogleFonts.carterOneTextTheme(),
 
     appBarTheme: const AppBarTheme(
       backgroundColor: whiteColor,
       elevation: 0,
       iconTheme: IconThemeData(
-        color: blackColor,
+        color:  Color(0xFFe63946),
       ),
     ),
     drawerTheme: const DrawerThemeData(

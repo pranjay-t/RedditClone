@@ -1,7 +1,7 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:reddit_clone/Features/auths/controller/auth_controller.dart';
 import 'package:reddit_clone/Features/posts/repository/post_respository.dart';
 import 'package:reddit_clone/core/enums/enums.dart';
@@ -71,6 +71,7 @@ class PostController extends StateNotifier<bool> {
     final post = Post(
       id: postId,
       title: title,
+      link: [],
       communityName: selectedcommunity.name,
       communityProfilePic: selectedcommunity.avatar,
       upvotes: [],
@@ -96,7 +97,7 @@ class PostController extends StateNotifier<bool> {
   void shareLinkPost({
     required BuildContext context,
     required String title,
-    required String link,
+    required List<String> link,
     required CommunityModel selectedcommunity,
   }) async {
     state = true;
@@ -129,26 +130,28 @@ class PostController extends StateNotifier<bool> {
     });
   }
 
-  void shareImagePost( {
+  void shareFilePost( {
     required BuildContext context,
     required String title,
-    required File? file,
+    required List<XFile> files,
     required Uint8List? webFile,
     required CommunityModel selectedcommunity,
+    required bool isVideo,
   }) async {
 
     state = true;
     String postId = const Uuid().v1();
     final user = _ref.read(userProvider)!;
-    final imageRes = await _storageRepository.storeFile(
+    final fileRes = await _storageRepository.storeFiles(
       path: 'posts/${selectedcommunity.name}',
       id: postId,
-      file: file,
+      files: files,
       webFile: webFile,
+      isVideo: isVideo,
     );
     _ref.watch(userProfileControllerProvider.notifier).updateKarma(UserKarma.imagePost);
 
-    imageRes.fold(
+    fileRes.fold(
       (l) => showSnackBar(context, l.message),
       (r) async {
         final post = Post(
@@ -161,7 +164,7 @@ class PostController extends StateNotifier<bool> {
           commentCount: 0,
           username: user.name,
           uid: user.uid,
-          type: 'image',
+          type:isVideo ? 'video' : 'image',
           createdAt: DateTime.now(),
           awards: [],
           link: r,
@@ -180,6 +183,8 @@ class PostController extends StateNotifier<bool> {
       },
     );
   }
+
+  
 
   void deletePost(Post post,BuildContext context) async {
     _ref.watch(userProfileControllerProvider.notifier).updateKarma(UserKarma.deletePost);
